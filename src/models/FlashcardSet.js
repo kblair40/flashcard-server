@@ -2,7 +2,10 @@ const mongoose = require("mongoose");
 
 const flashcardSetSchema = new mongoose.Schema(
   {
-    flashcards: [{ type: mongoose.Types.ObjectId, ref: "Flashcard" }],
+    flashcards: {
+      type: [{ type: mongoose.Types.ObjectId, ref: "Flashcard" }],
+      default: [],
+    },
     title: {
       type: String,
       required: true,

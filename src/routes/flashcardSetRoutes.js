@@ -6,6 +6,22 @@ const FlashcardSet = mongoose.model("FlashcardSet");
 const router = express.Router();
 router.use(requireAuth);
 
+router.get("/flashcard_set/:id", async (req, res) => {
+  if (!req.params || !req.params.id) {
+    return res.status(422).send({ msg: "FAILURE" });
+  }
+
+  try {
+    const foundSet = await FlashcardSet.findById(req.params.id);
+    console.log("\n\nFOUND SET:", foundSet, "\n\n");
+
+    return res.status(200).send({ set: foundSet });
+  } catch (e) {
+    console.log("FAILED TO FIND SET:", e);
+    return res.status(404).send({ msg: "FAILURE" });
+  }
+});
+
 router.post("/flashcard_set", async (req, res) => {
   // console.log("FULL REQ:", req, "\n\n");
   console.log("BODY:", req.body);
