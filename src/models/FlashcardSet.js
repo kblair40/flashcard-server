@@ -10,6 +10,9 @@ const flashcardSetSchema = new mongoose.Schema(
     category: {
       type: String,
     },
+    description: {
+      type: String,
+    },
     public: {
       type: Boolean,
       default: false,

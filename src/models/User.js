@@ -12,10 +12,6 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    email_verified: {
-      type: Boolean,
-      default: false,
-    },
     first_name: {
       type: String,
       required: true,
@@ -30,6 +26,10 @@ const userSchema = new mongoose.Schema(
       unique: true,
     },
     flashcard_sets: [{ type: mongoose.Types.ObjectId, ref: "FlashcardSet" }],
+    email_verified: {
+      type: Boolean,
+      default: false,
+    },
     avatar_image_url: {
       type: String,
       default: "",

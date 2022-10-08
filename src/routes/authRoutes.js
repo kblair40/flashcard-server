@@ -37,6 +37,8 @@ router.post("/signup", async (req, res) => {
     if (err.code === 11000) {
       error_field = Object.keys(err.keyPattern)[0];
       error_msg = `A user with this ${error_field} already exists`;
+
+      console.log("\n\nERROR MESSAGE:", error_msg);
     }
 
     return res.status(422).send({
