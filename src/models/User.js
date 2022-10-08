@@ -29,12 +29,11 @@ const userSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
+    flashcard_sets: [{ type: mongoose.Types.ObjectId, ref: "FlashcardSet" }],
     avatar_image_url: {
       type: String,
-      // required: true,
       default: "",
     },
-    // flashcard_sets, probably...
   },
   { timestamps: true }
 );

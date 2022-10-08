@@ -13,6 +13,8 @@ const PORT = 4000;
 
 // Models - must be above routes
 // require("./models/User");
+// require("./models/Flashcard");
+// require("./models/FlashcardSet");
 
 // Routes
 // const authRoutes = require("./routes/authRoutes");
