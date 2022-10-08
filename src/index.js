@@ -11,18 +11,15 @@ app.use(express.json());
 const MONGO_PASSWORD = process.env.MONGO_PASSWORD;
 const PORT = 4000;
 
-// Models - must style above routes
-require("./models/User");
-require("./models/Tournament");
+// Models - must be above routes
+// require("./models/User");
 
 // Routes
-const authRoutes = require("./routes/authRoutes");
-const tournamentRoutes = require("./routes/tournamentRoutes");
+// const authRoutes = require("./routes/authRoutes");
 
-app.use(authRoutes);
-app.use(tournamentRoutes);
-
-// require("./models/Tournament"); // not ready yet
+// app.use(...)
+// app.use(...)
+// app.use(...)
 
 app.get("/", (req, res) => {
   res.send("WORKING");
@@ -30,7 +27,7 @@ app.get("/", (req, res) => {
 
 app.listen(PORT, async () => {
   console.log(`Listening on port ${PORT}`);
-  const mongoUri = `mongodb+srv://kblair40:${MONGO_PASSWORD}@cluster0.1vl1wpr.mongodb.net/?retryWrites=true&w=majority`;
+  const mongoUri = `mongodb+srv://kblair40:${MONGO_PASSWORD}@cluster0.dnysscy.mongodb.net/?retryWrites=true&w=majority`;
 
   try {
     await mongoose.connect(mongoUri);
