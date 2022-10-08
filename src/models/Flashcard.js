@@ -15,10 +15,6 @@ const flashcardSchema = new mongoose.Schema(
     index: {
       type: Number,
     },
-    flashcard_set: {
-      type: mongoose.Types.ObjectId,
-      ref: "FlashcardSet",
-    },
   },
   { timestamps: true }
 );

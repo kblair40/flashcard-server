@@ -12,9 +12,9 @@ const MONGO_PASSWORD = process.env.MONGO_PASSWORD;
 const PORT = 4000;
 
 // Models - must be above routes
-// require("./models/User");
-// require("./models/Flashcard");
-// require("./models/FlashcardSet");
+require("./models/User");
+require("./models/FlashcardSet");
+require("./models/Flashcard");
 
 // Routes
 // const authRoutes = require("./routes/authRoutes");
