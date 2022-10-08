@@ -18,8 +18,10 @@ require("./models/Flashcard");
 
 // Routes
 const authRoutes = require("./routes/authRoutes");
+const flashcardSetRoutes = require("./routes/flashcardSetRoutes");
 
 app.use(authRoutes);
+app.use(flashcardSetRoutes);
 // app.use(...)
 // app.use(...)
 
