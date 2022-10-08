@@ -3,14 +3,17 @@ const mongoose = require("mongoose");
 const flashcardSetSchema = new mongoose.Schema(
   {
     flashcards: [{ type: mongoose.Types.ObjectId, ref: "Flashcard" }],
-    back_content: {
+    title: {
+      type: String,
+      required: true,
+    },
+    category: {
       type: String,
     },
     public: {
       type: Boolean,
       default: false,
     },
-    // flashcard_sets, probably...
   },
   { timestamps: true }
 );

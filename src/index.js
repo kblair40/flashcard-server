@@ -17,9 +17,9 @@ require("./models/FlashcardSet");
 require("./models/Flashcard");
 
 // Routes
-// const authRoutes = require("./routes/authRoutes");
+const authRoutes = require("./routes/authRoutes");
 
-// app.use(...)
+app.use(authRoutes);
 // app.use(...)
 // app.use(...)
 

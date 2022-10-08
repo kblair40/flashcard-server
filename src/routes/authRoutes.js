@@ -9,8 +9,6 @@ router.post("/signup", async (req, res) => {
   // console.log("FULL REQ:", req, "\n\n");
   console.log("BODY:", req.body);
 
-  // res.status(422).send({ message: "FAILURE" });
-
   const { email, password, first_name, last_name, username } = req.body;
 
   try {
