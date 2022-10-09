@@ -94,15 +94,23 @@ router.delete("/flashcard_set/:set_id/:card_id", async (req, res) => {
   }
 
   try {
-    await Flashcard.deleteOne({ _id: card_id });
+    // await Flashcard.deleteOne({ _id: card_id });
 
-    const set = await Flashcard.findById(set_id);
+    const set = await FlashcardSet.findById(set_id);
     const cards = [...set.flashcards];
-    const deleteIdx = cards.find((card) => card._id == card_id);
+    const deleteIdx = cards.findIndex((card) => card._id == card_id);
+    console.log("DELETE IDX:", deleteIdx);
     cards.splice(deleteIdx, 1);
 
     set.flashcards = cards;
-    const updatedSet = await set.save();
+    // const updatedSet = await set.save();
+    const [dontcare, updatedSet] = await Promise.all([
+      Flashcard.deleteOne({ _id: card_id }),
+      set.save(),
+    ]);
+    console.log("\nUPDATED SET:", updatedSet);
+
+    updatedSet.populate({ path: "flashcards" });
 
     return res.status(200).send({ set: updatedSet });
   } catch (e) {
