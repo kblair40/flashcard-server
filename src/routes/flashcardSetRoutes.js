@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const { requireAuth } = require("../middleware/requireAuth");
 const FlashcardSet = mongoose.model("FlashcardSet");
+const Flashcard = mongoose.model("Flashcard");
 
 const router = express.Router();
 router.use(requireAuth);
@@ -19,6 +20,36 @@ router.get("/flashcard_set/:id", async (req, res) => {
   } catch (e) {
     console.log("FAILED TO FIND SET:", e);
     return res.status(404).send({ msg: "FAILURE" });
+  }
+});
+
+router.patch("/flashcard_set/:action/:id", async (req, res) => {
+  console.log("\n\nPARAMS:", req.params);
+  const { action, id } = req.params;
+  const { front_content, back_content } = req.body;
+
+  try {
+    const flashcardSet = await FlashcardSet.findById(id);
+    if (!flashcardSet) {
+      return res
+        .status(404)
+        .send({ msg: "Could not find the flashcard set to add to" });
+    }
+
+    const cardCount = flashcardSet.flashcards.length;
+    const index = cardCount + 1;
+    const card = new Flashcard({ front_content, back_content, index });
+    await card.save();
+
+    flashcardSet.flashcards.push(card);
+    const savedSet = await flashcardSet.save();
+
+    return res.send({ flashcardSet: savedSet });
+  } catch (err) {
+    // 422 - invalid data provided
+    console.log("ERROR SAVING CARD:", err);
+
+    return res.status(422).send({ msg: "Failed" });
   }
 });
 
