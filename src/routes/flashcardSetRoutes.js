@@ -16,6 +16,9 @@ router.get("/flashcard_set/:id", async (req, res) => {
     const foundSet = await FlashcardSet.findById(req.params.id);
     console.log("\n\nFOUND SET:", foundSet, "\n\n");
 
+    await foundSet.populate({ path: "flashcards" });
+    console.log("\n\n\nAFTER POPULATE:", foundSet, "\n");
+
     return res.status(200).send({ set: foundSet });
   } catch (e) {
     console.log("FAILED TO FIND SET:", e);
