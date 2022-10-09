@@ -47,6 +47,8 @@ router.patch("/flashcard_set/:action/:id", async (req, res) => {
     flashcardSet.flashcards.push(card);
     const savedSet = await flashcardSet.save();
 
+    await savedSet.populate({ path: "flashcards" });
+
     return res.send({ flashcardSet: savedSet });
   } catch (err) {
     // 422 - invalid data provided
