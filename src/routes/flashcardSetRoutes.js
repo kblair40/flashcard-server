@@ -87,4 +87,28 @@ router.post("/flashcard_set", async (req, res) => {
   }
 });
 
+router.delete("/flashcard_set/:set_id/:card_id", async (req, res) => {
+  const { set_id, card_id } = req.params;
+  if (!set_id || !card_id) {
+    return res.status(422).send({ msg: "missing card id and/or set id" });
+  }
+
+  try {
+    await Flashcard.deleteOne({ _id: card_id });
+
+    const set = await Flashcard.findById(set_id);
+    const cards = [...set.flashcards];
+    const deleteIdx = cards.find((card) => card._id == card_id);
+    cards.splice(deleteIdx, 1);
+
+    set.flashcards = cards;
+    const updatedSet = await set.save();
+
+    return res.status(200).send({ set: updatedSet });
+  } catch (e) {
+    console.error("FAILED DELETING CARD:", e);
+    return res.status(400).send({ msg: "Failure" });
+  }
+});
+
 module.exports = router;
