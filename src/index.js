@@ -19,11 +19,11 @@ require("./models/Flashcard");
 // Routes
 const authRoutes = require("./routes/authRoutes");
 const flashcardSetRoutes = require("./routes/flashcardSetRoutes");
+const flashcardRoutes = require("./routes/flashcardRoutes");
 
 app.use(authRoutes);
 app.use(flashcardSetRoutes);
-// app.use(...)
-// app.use(...)
+app.use(flashcardRoutes);
 
 app.get("/", (req, res) => {
   res.send("WORKING");
