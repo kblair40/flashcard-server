@@ -26,10 +26,38 @@ router.get("/flashcard_set/:id", async (req, res) => {
   }
 });
 
+const handlePatchFlashcardSet = async (id, req, res) => {
+  const { body } = req;
+  const flashcardSet = await FlashcardSet.findById(id);
+  if (!flashcardSet) {
+    return res
+      .status(404)
+      .send({ msg: "Could not find the flashcard set to add to" });
+  }
+
+  for (let field in body) {
+    flashcardSet[field] = body[field];
+  }
+
+  try {
+    const patchedSet = await flashcardSet.save();
+    console.log("PATCHED SET:", patchedSet);
+    return res.status(200).send({ set: patchedSet });
+  } catch (e) {
+    console.log("FAILED TO PATCH SET:", e);
+    return res.status(400).send({ msg: "Failure" });
+  }
+};
+
 router.patch("/flashcard_set/:action/:id", async (req, res) => {
   console.log("\n\nPARAMS:", req.params);
   const { action, id } = req.params;
   const { front_content, back_content } = req.body;
+
+  if (action === "patch") {
+    console.log("PATCH:");
+    return handlePatchFlashcardSet(id, req, res);
+  }
 
   try {
     const flashcardSet = await FlashcardSet.findById(id);
