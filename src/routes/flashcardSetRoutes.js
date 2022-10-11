@@ -26,42 +26,18 @@ router.get("/flashcard_set/:id", async (req, res) => {
   }
 });
 
-const handleChangeSetOrder = async (id, req, res) => {
-  if (!req.params || !req.params.id) {
-    return res.status(422).send({ msg: "FAILURE" });
-  }
-
-  try {
-    const foundSet = await FlashcardSet.findById(id);
-    console.log("\n\nFOUND SET:", foundSet, "\n\n");
-
-    const { flashcards } = req.body;
-    foundSet.flashcards = flashcards;
-    await foundSet.save();
-    console.log("\n\nAFTER SAVE:", foundSet);
-
-    // await foundSet.populate({ path: "flashcards" });
-    // console.log("\n\n\nAFTER POPULATE:", foundSet, "\n");
-
-    return res.status(200).send({ set: foundSet });
-  } catch (e) {
-    console.log("FAILED TO FIND SET:", e);
-    return res.status(404).send({ msg: "FAILURE" });
-  }
-};
-
 router.patch("/flashcard_set/:action/:id", async (req, res) => {
   console.log("\n\nPARAMS:", req.params);
   const { action, id } = req.params;
   const { front_content, back_content } = req.body;
 
   if (action === "change_order") {
-    console.log("CHANGE ORDER");
+    // console.log("CHANGE ORDER");
     return handleChangeSetOrder(id, req, res);
   }
 
   if (action === "patch") {
-    console.log("PATCH:");
+    // console.log("PATCH:");
     return handlePatchFlashcardSet(id, req, res);
   }
 
@@ -183,5 +159,24 @@ const handlePatchFlashcardSet = async (id, req, res) => {
   } catch (e) {
     console.log("FAILED TO PATCH SET:", e);
     return res.status(400).send({ msg: "Failure" });
+  }
+};
+
+const handleChangeSetOrder = async (id, req, res) => {
+  if (!req.params || !req.params.id) {
+    return res.status(422).send({ msg: "FAILURE" });
+  }
+
+  try {
+    const foundSet = await FlashcardSet.findById(id);
+
+    const { flashcards } = req.body;
+    foundSet.flashcards = flashcards;
+    await foundSet.save();
+
+    return res.status(200).send({ set: foundSet });
+  } catch (e) {
+    console.log("FAILED TO FIND SET:", e);
+    return res.status(404).send({ msg: "FAILURE" });
   }
 };
