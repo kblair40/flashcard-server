@@ -172,7 +172,8 @@ const handleChangeSetOrder = async (id, req, res) => {
 
     const { flashcards } = req.body;
     foundSet.flashcards = flashcards;
-    await foundSet.save();
+    const savedSet = await foundSet.save();
+    await savedSet.populate({ path: "flashcards" });
 
     return res.status(200).send({ set: foundSet });
   } catch (e) {
