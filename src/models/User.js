@@ -34,6 +34,9 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    study_sessions: {
+      type: [{ type: mongoose.Types.ObjectId, ref: "StudySession" }],
+    },
   },
   { timestamps: true }
 );
