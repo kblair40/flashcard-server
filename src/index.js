@@ -23,12 +23,14 @@ const flashcardSetRoutes = require("./routes/flashcardSetRoutes");
 const flashcardRoutes = require("./routes/flashcardRoutes");
 const userRoutes = require("./routes/userRoutes");
 const studySessionRoutes = require("./routes/studySessionRoutes");
+const historyRoutes = require("./routes/historyRoutes");
 
 app.use(authRoutes);
 app.use(flashcardSetRoutes);
 app.use(flashcardRoutes);
 app.use(studySessionRoutes);
 app.use(userRoutes);
+app.use(historyRoutes);
 
 app.get("/", (req, res) => {
   res.send("WORKING");

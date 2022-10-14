@@ -46,7 +46,8 @@ router.patch("/study_session/:session_id", async (req, res) => {
   }
 
   try {
-    const session = new StudySession({ start_time, duration, flashcard_set });
+    const session = await StudySession.findById(session_id);
+    session.duration = duration;
     const savedSession = await session.save();
 
     return res.send({ study_session: savedSession });

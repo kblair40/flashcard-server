@@ -10,6 +10,7 @@ const studySessionSchema = new mongoose.Schema(
       type: {
         hours: Number,
         minutes: Number,
+        seconds: Number,
       },
     },
     flashcard_set: {
