@@ -15,6 +15,7 @@ const PORT = 4000;
 require("./models/User");
 require("./models/FlashcardSet");
 require("./models/Flashcard");
+require("./models/StudySession");
 
 // Routes
 const authRoutes = require("./routes/authRoutes");

@@ -20,6 +20,10 @@ const flashcardSetSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    last_study_session_timestamp: {
+      type: Number,
+      default: Date.now,
+    },
   },
   { timestamps: true }
 );
