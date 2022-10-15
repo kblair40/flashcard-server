@@ -26,6 +26,9 @@ const userSchema = new mongoose.Schema(
       unique: true,
     },
     flashcard_sets: [{ type: mongoose.Types.ObjectId, ref: "FlashcardSet" }],
+    favorite_flashcard_sets: [
+      { type: mongoose.Types.ObjectId, ref: "FlashcardSet" },
+    ],
     email_verified: {
       type: Boolean,
       default: false,
