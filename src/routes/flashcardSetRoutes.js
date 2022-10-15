@@ -72,11 +72,16 @@ router.post("/flashcard_set", async (req, res) => {
   // console.log("FULL REQ:", req, "\n\n");
   console.log("BODY:", req.body);
 
-  const { title, description } = req.body;
+  const { title, description, category, is_public } = req.body;
   const { user } = req;
 
   try {
-    const set = new FlashcardSet({ title, description });
+    const set = new FlashcardSet({
+      title,
+      description,
+      category,
+      public: is_public,
+    });
 
     const flashcardSet = await set.save();
 
