@@ -18,7 +18,7 @@ const flashcardSetSchema = new mongoose.Schema(
     },
     public: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     last_study_session_timestamp: {
       type: Number,

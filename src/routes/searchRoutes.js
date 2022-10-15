@@ -11,7 +11,6 @@ router.get("/search", async (req, res) => {
     user,
     query: { title },
   } = req;
-
   console.log("SEARCH QUERY:", title);
 
   if (!user || !title) {
@@ -27,7 +26,6 @@ router.get("/search", async (req, res) => {
             query: title,
             path: "title",
             tokenOrder: "sequential",
-            // fuzzy: {},
           },
         },
       },
@@ -36,18 +34,29 @@ router.get("/search", async (req, res) => {
           title: 1,
           description: 1,
           flashcards: 1,
+          public: 1,
         },
       },
       {
         $limit: 5,
       },
     ]);
-    console.log("FOUND SETS:", results);
-    if (!results) results = [];
 
-    return res.status(200).send(results);
+    // Filter out non-public sets
+    let validResults = [];
+    if (results) {
+      results.forEach((result) => {
+        console.log("RESULT:", result, result.public);
+        if (result.public) {
+          validResults.push(result);
+        }
+      });
+    }
+    console.log("\nVALID RESULTS:", validResults);
+
+    return res.status(200).send(validResults);
   } catch (e) {
-    console.log("error");
+    console.log("error", e);
     return res.status(500).send({ msg: "Something went wrong" });
   }
 });
