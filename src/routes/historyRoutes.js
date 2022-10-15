@@ -32,8 +32,6 @@ router.delete("/history/:id", async (req, res) => {
     params: { id },
   } = req;
 
-  console.log("\n\nPARAMS:", id);
-
   if (!user || !id) {
     return res.status(422).send({ msg: "User or id is missing" });
   }
@@ -42,10 +40,10 @@ router.delete("/history/:id", async (req, res) => {
     let itemIdx = user.study_sessions.findIndex(
       (ss) => ss._id.toString() === id
     );
-    console.log("STUDY SESSIONS:", user.study_sessions);
-    console.log("ITEM IDX:", itemIdx);
+
     if (itemIdx === -1) {
-      console.log("\n\n404\n\n");
+      console.log("\n\n404");
+      console.log("ID:", id, "\n\n");
       return res
         .status(404)
         .send({ msg: "Could not find session id in user's study sessions" });
