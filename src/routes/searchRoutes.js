@@ -12,6 +12,8 @@ router.get("/search", async (req, res) => {
     query: { title },
   } = req;
 
+  console.log("SEARCH QUERY:", title);
+
   if (!user || !title) {
     return res.status(422).send([]);
   }
@@ -40,10 +42,10 @@ router.get("/search", async (req, res) => {
         $limit: 5,
       },
     ]);
-    console.log("FOUND USERS:", results);
+    console.log("FOUND SETS:", results);
+    if (!results) results = [];
 
-    console.log("\n\nUSER:", pop_user.study_sessions);
-    return res.status(200).send({ history: pop_user.study_sessions });
+    return res.status(200).send(results);
   } catch (e) {
     console.log("error");
     return res.status(500).send({ msg: "Something went wrong" });

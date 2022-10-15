@@ -34,6 +34,8 @@ router.post("/study_session", async (req, res) => {
 });
 
 router.patch("/study_session/:session_id", async (req, res) => {
+  // TODO: IF USER PATCHES WITH A DURATION BELOW 1 MINUTE, WE SHOULD NOT COUNT IT AS A STUDY SESSION
+  // IF DURATION < 1 MINUTE, DELETE STUDY SESSION INSTEAD OF PACHING
   console.log("BODY:", req.body);
   const { session_id } = req.params;
 

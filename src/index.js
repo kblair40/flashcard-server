@@ -24,6 +24,7 @@ const flashcardRoutes = require("./routes/flashcardRoutes");
 const userRoutes = require("./routes/userRoutes");
 const studySessionRoutes = require("./routes/studySessionRoutes");
 const historyRoutes = require("./routes/historyRoutes");
+const searchRoutes = require("./routes/searchRoutes");
 
 app.use(authRoutes);
 app.use(flashcardSetRoutes);
@@ -31,6 +32,7 @@ app.use(flashcardRoutes);
 app.use(studySessionRoutes);
 app.use(userRoutes);
 app.use(historyRoutes);
+app.use(searchRoutes);
 
 app.get("/", (req, res) => {
   res.send("WORKING");
