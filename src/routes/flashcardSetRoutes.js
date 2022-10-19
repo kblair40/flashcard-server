@@ -26,6 +26,18 @@ router.get("/flashcard_set/:id", async (req, res) => {
   }
 });
 
+router.get("/community_sets", async (req, res) => {
+  try {
+    const foundSets = await FlashcardSet.find({ public: true }).limit(5);
+    console.log("\nFOUND SETS:", foundSets, "\n");
+
+    return res.status(200).send(foundSets);
+  } catch (e) {
+    console.error("FAILED FINDING SETS:", e);
+    return res.status(404).send({ msg: "Failed finding sets" });
+  }
+});
+
 router.patch("/flashcard_set/:action/:id", async (req, res) => {
   console.log("\n\nPARAMS:", req.params);
   const { action, id } = req.params;
