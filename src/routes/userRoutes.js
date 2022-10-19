@@ -20,28 +20,29 @@ router.get("/user", async (req, res) => {
   return res.status(200).send({ user });
 });
 
-// router.get("/user", async (req, res) => {
-//   console.log(0);
-//   const { user } = req;
-//   if (!user || !user.flashcard_sets) {
-//     console.log(1);
-//     return res.status(500).send({ msg: "Failure" });
-//   }
+router.patch("/user", async (req, res) => {
+  console.log(0);
+  const { user } = req;
+  if (!user || !user.flashcard_sets) {
+    return res.status(500).send({ msg: "Failure" });
+  }
 
-//   console.log(2);
+  const data = req.body;
 
-//   try {
-//     const { flashcard_sets: sets } = user;
-//     console.log(3, sets);
+  if (data.new_favorite_set) {
+    user.favorite_flashcard_sets.push(data.new_favorite_set);
+  }
 
-//     await sets.populate({ path: "flashcard_sets" });
-//     console.log("POPULATED SETS:", sets);
-//     console.log(4);
+  try {
+    const savedUser = await user.save();
+    // await savedUser.populate({
+    //   path: "favorite_flashcard_sets",
+    // });
 
-//     return res.status(200).send({ sets });
-//   } catch (err) {
-//     return res.status(500).send({ msg: "Failure" });
-//   }
-// });
+    return res.status(200).send(savedUser);
+  } catch (err) {
+    return res.status(500).send({ msg: "Failure" });
+  }
+});
 
 module.exports = router;
