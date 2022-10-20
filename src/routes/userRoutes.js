@@ -14,7 +14,15 @@ router.get("/user", async (req, res) => {
   if (req.query && req.query.flashcard_sets) {
     const { flashcard_sets } = user;
     console.log("FLASHCARD SETS:", flashcard_sets, typeof flashcard_sets);
-    await user.populate({ path: "flashcard_sets" });
+    await Promise.all([
+      user.populate("flashcard_sets"),
+      user.populate("study_sessions"),
+    ]);
+    // await user.populate("flashcard_sets");
+    // await user.populate("study_sessions");
+    // await user
+    //   .populate({ path: "flashcard_sets" })
+    //   .populate({ path: "study_sessions" });
   }
 
   return res.status(200).send({ user });
