@@ -49,9 +49,11 @@ router.patch("/user/:action", async (req, res) => {
 
   try {
     const savedUser = await user.save();
-    // await savedUser.populate({
-    //   path: "favorite_flashcard_sets",
-    // });
+    if (action === "remove") {
+      await savedUser.populate({
+        path: "favorite_flashcard_sets",
+      });
+    }
 
     return res.status(200).send(savedUser);
   } catch (err) {

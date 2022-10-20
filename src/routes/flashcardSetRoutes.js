@@ -26,6 +26,30 @@ router.get("/flashcard_set/:id", async (req, res) => {
   }
 });
 
+router.get("/favorite_sets", async (req, res) => {
+  const { user } = req;
+  // const fav_sets_copy = [...user.favorite_flashcard_sets];
+
+  try {
+    if (user && user.favorite_flashcard_sets) {
+      const favSets = user.favorite_flashcard_sets;
+      if (favSets.length) {
+        await user.populate({
+          path: "favorite_flashcard_sets",
+        });
+      }
+
+      return res.status(200).send(user.favorite_flashcard_sets);
+    } else {
+      console.log("MISSING USER OR FAVORITE SETS");
+      return res.status(422).send({ msg: "MISSING DATA" });
+    }
+  } catch (e) {
+    console.log("FAILURE:", e);
+    return res.status(500).send({ msg: "FAILURE" });
+  }
+});
+
 router.get("/community_sets", async (req, res) => {
   try {
     const foundSets = await FlashcardSet.find({ public: true }).limit(5);
