@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const { requireAuth } = require("../middleware/requireAuth");
 
+const FlashcardSet = mongoose.model("FlashcardSet");
 const StudySession = mongoose.model("StudySession");
 
 const router = express.Router();
@@ -39,7 +40,7 @@ router.patch("/study_session/:session_id", async (req, res) => {
   console.log("BODY:", req.body);
   const { session_id } = req.params;
 
-  const { duration } = req.body;
+  const { duration, set_id } = req.body;
 
   if (!session_id || !duration) {
     return res.status(422).send({
@@ -48,6 +49,15 @@ router.patch("/study_session/:session_id", async (req, res) => {
   }
 
   try {
+    if (set_id) {
+      let set = await FlashcardSet.findById(set_id);
+      if (set) {
+        set.last_study_session_timestamp = new Date().getTime();
+        const savedSet = await set.save();
+        console.log("SAVED SET:", savedSet);
+      }
+    }
+
     const session = await StudySession.findById(session_id);
     session.duration = duration;
     const savedSession = await session.save();
