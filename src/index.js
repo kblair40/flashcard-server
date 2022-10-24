@@ -9,7 +9,7 @@ app.use(cors());
 app.use(express.json());
 
 const MONGO_PASSWORD = process.env.MONGO_PASSWORD;
-const PORT = 4000;
+// const PORT = 4000;
 
 // Models - must be above routes
 require("./models/User");
@@ -38,8 +38,8 @@ app.get("/", (req, res) => {
   res.send("WORKING");
 });
 
-app.listen(PORT, async () => {
-  console.log(`Listening on port ${PORT}`);
+app.listen(process.env.port || 4000, async () => {
+  // console.log(`Listening on port ${PORT}`);
   const mongoUri = `mongodb+srv://kblair40:${MONGO_PASSWORD}@cluster0.dnysscy.mongodb.net/?retryWrites=true&w=majority`;
 
   try {
