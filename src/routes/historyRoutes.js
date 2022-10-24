@@ -18,10 +18,23 @@ router.get("/history", async (req, res) => {
         model: "FlashcardSet",
       },
     });
-    console.log("\n\nUSER:", pop_user.study_sessions);
-    return res.status(200).send({ history: pop_user.study_sessions });
+    console.log("\n\nSTUDY SESSIONS:", pop_user.study_sessions.slice(5, 15));
+    let copy = [...pop_user.study_sessions];
+    console.log("COPY:", copy.slice(0, 5));
+    copy = copy.filter((set) => {
+      console.log("\n\nSET:", set);
+      if (!set.duration) return false;
+      else {
+        let dur = set.duration;
+        return !dur.hours && dur.minutes && dur.seconds;
+      }
+    });
+    return res
+      .status(200)
+      .send({ history: copy.slice(0, 20), moreThan20: copy.length > 20 });
+    // return res.status(200).send({ history: pop_user.study_sessions });
   } catch (e) {
-    console.log("error");
+    console.log("error", e);
     return res.status(500).send({ msg: "Something went wrong" });
   }
 });
