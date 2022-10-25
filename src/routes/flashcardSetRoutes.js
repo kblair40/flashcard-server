@@ -200,7 +200,19 @@ router.delete("/flashcard_set/:set_id", async (req, res) => {
       console.log("Set to delete =", userSets[setIdx]);
       userSets.splice(setIdx, 1);
       user.flashcard_sets = userSets;
-      promises.push(await user.save());
+
+      const userFavSets = [...user.favorite_flashcard_sets].map((set) =>
+        set.toString()
+      );
+
+      if (userFavSets.includes(set_id)) {
+        console.log("YES IS FAVORITE:", userFavSets);
+        const favSetIdx = userFavSets.findIndex((setId) => setId === set_id);
+        if (favSetIdx !== -1) {
+          userFavSets.splice(favSetIdx, 1);
+          user.favorite_flashcard_sets = userFavSets;
+        }
+      }
 
       const [savedUser, revisedSets] = await Promise.all([
         user.save(),
