@@ -144,6 +144,42 @@ router.post("/flashcard_set", async (req, res) => {
 
 router.delete("/flashcard_set/:set_id/:card_id", async (req, res) => {
   const { set_id, card_id } = req.params;
+  console.log("NEW DELETE REQ:", req.body);
+  if (!set_id || !card_id) {
+    return res.status(422).send({ msg: "missing card id and/or set id" });
+  }
+
+  try {
+    const set = await FlashcardSet.findById(set_id);
+    const cards = [...set.flashcards];
+    const deleteIdx = cards.findIndex((card) => card._id == card_id);
+
+    if (deleteIdx === -1) {
+      return res.status(404).send({ msg: "Could not find card to delete" });
+    }
+
+    cards.splice(deleteIdx, 1);
+
+    set.flashcards = cards;
+    const [dontcare, updatedSet] = await Promise.all([
+      // Do these at the same time so we don't end up with a card being deleted
+      //  successfully but not removed from set, or vice versa
+      Flashcard.deleteOne({ _id: card_id }),
+      set.save(),
+    ]);
+    // console.log("\nUPDATED SET:", updatedSet);
+
+    await updatedSet.populate({ path: "flashcards" });
+
+    return res.status(200).send({ set: updatedSet });
+  } catch (e) {
+    console.error("FAILED DELETING CARD:", e);
+    return res.status(400).send({ msg: "Failure" });
+  }
+});
+
+router.delete("/flashcard_set/:set_id", async (req, res) => {
+  const { set_id } = req.params;
   if (!set_id || !card_id) {
     return res.status(422).send({ msg: "missing card id and/or set id" });
   }
