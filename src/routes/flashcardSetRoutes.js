@@ -208,6 +208,7 @@ router.delete("/flashcard_set/:set_id", async (req, res) => {
       ]);
 
       console.log("\n\nRES:", { savedUser, revisedSets });
+      return res.status(200).send({ msg: "Success" });
     } else {
       console.log("\nNOT FOUND:\n");
       return res
@@ -215,7 +216,6 @@ router.delete("/flashcard_set/:set_id", async (req, res) => {
         .send({ msg: "Could not find the requested set to delete" });
     }
 
-    return res.status(200).send({ msg: "not ready yet" });
     // return res.status(200).send({ set: updatedSet });
   } catch (e) {
     console.error("FAILED DELETING CARD:", e);
