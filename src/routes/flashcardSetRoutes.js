@@ -179,34 +179,44 @@ router.delete("/flashcard_set/:set_id/:card_id", async (req, res) => {
 });
 
 router.delete("/flashcard_set/:set_id", async (req, res) => {
-  const { set_id } = req.params;
-  if (!set_id || !card_id) {
-    return res.status(422).send({ msg: "missing card id and/or set id" });
+  const {
+    params: { set_id },
+    user,
+  } = req;
+  if (!set_id || !user) {
+    return res.status(422).send({ msg: "missing user and/or set id" });
   }
 
   try {
-    const set = await FlashcardSet.findById(set_id);
-    const cards = [...set.flashcards];
-    const deleteIdx = cards.findIndex((card) => card._id == card_id);
+    // console.log("USER SETS:", user.flashcard_sets);
+    const userSets = [...user.flashcard_sets].map((set) => set.toString());
+    console.log("USER SETS AFTER:", userSets);
+    console.log({ set_id });
 
-    if (deleteIdx === -1) {
-      return res.status(404).send({ msg: "Could not find card to delete" });
+    let promises = [];
+    const setIdx = userSets.findIndex((setId) => setId === set_id);
+    if (setIdx !== -1) {
+      console.log("INDEX:", setIdx);
+      console.log("Set to delete =", userSets[setIdx]);
+      userSets.splice(setIdx, 1);
+      user.flashcard_sets = userSets;
+      promises.push(await user.save());
+
+      const [savedUser, revisedSets] = await Promise.all([
+        user.save(),
+        FlashcardSet.deleteOne({ _id: set_id }),
+      ]);
+
+      console.log("\n\nRES:", { savedUser, revisedSets });
+    } else {
+      console.log("\nNOT FOUND:\n");
+      return res
+        .status(404)
+        .send({ msg: "Could not find the requested set to delete" });
     }
 
-    cards.splice(deleteIdx, 1);
-
-    set.flashcards = cards;
-    const [dontcare, updatedSet] = await Promise.all([
-      // Do these at the same time so we don't end up with a card being deleted
-      //  successfully but not removed from set, or vice versa
-      Flashcard.deleteOne({ _id: card_id }),
-      set.save(),
-    ]);
-    // console.log("\nUPDATED SET:", updatedSet);
-
-    await updatedSet.populate({ path: "flashcards" });
-
-    return res.status(200).send({ set: updatedSet });
+    return res.status(200).send({ msg: "not ready yet" });
+    // return res.status(200).send({ set: updatedSet });
   } catch (e) {
     console.error("FAILED DELETING CARD:", e);
     return res.status(400).send({ msg: "Failure" });
