@@ -10,7 +10,7 @@ router.use(requireAuth);
 
 router.post("/study_session", async (req, res) => {
   // Should get start_time and flashcard_set in body here.  Duration will be patched at end of session.
-  console.log("BODY:", req.body);
+  // console.log("BODY:", req.body);
 
   const { start_time, flashcard_set } = req.body;
   const { user } = req;
@@ -37,7 +37,7 @@ router.post("/study_session", async (req, res) => {
 router.patch("/study_session/:session_id", async (req, res) => {
   // TODO: IF USER PATCHES WITH A DURATION BELOW 1 MINUTE, WE SHOULD NOT COUNT IT AS A STUDY SESSION
   // IF DURATION < 1 MINUTE, DELETE STUDY SESSION INSTEAD OF PACHING
-  console.log("BODY:", req.body);
+  // console.log("BODY:", req.body);
   const { session_id } = req.params;
 
   const { duration, set_id } = req.body;
@@ -54,7 +54,7 @@ router.patch("/study_session/:session_id", async (req, res) => {
       if (set) {
         set.last_study_session_timestamp = new Date().getTime();
         const savedSet = await set.save();
-        console.log("SAVED SET:", savedSet);
+        // console.log("SAVED SET:", savedSet);
       }
     }
 

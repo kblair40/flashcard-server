@@ -14,10 +14,10 @@ router.get("/flashcard_set/:id", async (req, res) => {
 
   try {
     const foundSet = await FlashcardSet.findById(req.params.id);
-    console.log("\n\nFOUND SET:", foundSet, "\n\n");
+    // console.log("\n\nFOUND SET:", foundSet, "\n\n");
 
     await foundSet.populate({ path: "flashcards" });
-    console.log("\n\n\nAFTER POPULATE:", foundSet, "\n");
+    // console.log("\n\n\nAFTER POPULATE:", foundSet, "\n");
 
     return res.status(200).send({ set: foundSet });
   } catch (e) {
@@ -41,7 +41,7 @@ router.get("/favorite_sets", async (req, res) => {
 
       return res.status(200).send(user.favorite_flashcard_sets);
     } else {
-      console.log("MISSING USER OR FAVORITE SETS");
+      // console.log("MISSING USER OR FAVORITE SETS");
       return res.status(422).send({ msg: "MISSING DATA" });
     }
   } catch (e) {
@@ -53,7 +53,7 @@ router.get("/favorite_sets", async (req, res) => {
 router.get("/community_sets", async (req, res) => {
   try {
     const foundSets = await FlashcardSet.find({ public: true }).limit(5);
-    console.log("\nFOUND SETS:", foundSets, "\n");
+    // console.log("\nFOUND SETS:", foundSets, "\n");
 
     return res.status(200).send(foundSets);
   } catch (e) {
@@ -63,7 +63,7 @@ router.get("/community_sets", async (req, res) => {
 });
 
 router.patch("/flashcard_set/:action/:id", async (req, res) => {
-  console.log("\n\nPARAMS:", req.params);
+  // console.log("\n\nPARAMS:", req.params);
   const { action, id } = req.params;
   const { front_content, back_content } = req.body;
 
@@ -106,7 +106,7 @@ router.patch("/flashcard_set/:action/:id", async (req, res) => {
 
 router.post("/flashcard_set", async (req, res) => {
   // console.log("FULL REQ:", req, "\n\n");
-  console.log("BODY:", req.body);
+  // console.log("BODY:", req.body);
 
   const { title, description, category, is_public } = req.body;
   const { user } = req;
@@ -127,7 +127,7 @@ router.post("/flashcard_set", async (req, res) => {
     return res.send({ flashcardSet });
   } catch (err) {
     // 422 - invalid data provided
-    console.log("ERROR SIGNING UP:", err);
+    // console.log("ERROR SIGNING UP:", err);
     let error_msg = "";
     let error_field = "";
 
@@ -135,7 +135,7 @@ router.post("/flashcard_set", async (req, res) => {
       error_field = Object.keys(err.keyPattern)[0];
       error_msg = `A user with this ${error_field} already exists`;
 
-      console.log("\n\nERROR MESSAGE:", error_msg);
+      // console.log("\n\nERROR MESSAGE:", error_msg);
     }
 
     return res.status(422).send({ msg: "Failed" });
@@ -166,7 +166,7 @@ router.delete("/flashcard_set/:set_id/:card_id", async (req, res) => {
       Flashcard.deleteOne({ _id: card_id }),
       set.save(),
     ]);
-    console.log("\nUPDATED SET:", updatedSet);
+    // console.log("\nUPDATED SET:", updatedSet);
 
     await updatedSet.populate({ path: "flashcards" });
 
@@ -195,7 +195,7 @@ const handlePatchFlashcardSet = async (id, req, res) => {
 
   try {
     const patchedSet = await flashcardSet.save();
-    console.log("PATCHED SET:", patchedSet);
+    // console.log("PATCHED SET:", patchedSet);
     return res.status(200).send({ set: patchedSet });
   } catch (e) {
     console.log("FAILED TO PATCH SET:", e);

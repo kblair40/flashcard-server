@@ -20,7 +20,7 @@ router.patch("/flashcard/:id", async (req, res) => {
 
   try {
     const foundCard = await Flashcard.findById(id);
-    console.log("\nCARD FOUND:", foundCard, "\n");
+    // console.log("\nCARD FOUND:", foundCard, "\n");
     foundCard.front_content = front_content;
     foundCard.back_content = back_content;
     const patchedCard = await foundCard.save();

@@ -18,11 +18,9 @@ router.get("/history", async (req, res) => {
         model: "FlashcardSet",
       },
     });
-    console.log("\n\nSTUDY SESSIONS:", pop_user.study_sessions.slice(5, 15));
+    // console.log("\n\nSTUDY SESSIONS:", pop_user.study_sessions.slice(5, 15));
     let copy = [...pop_user.study_sessions];
-    console.log("COPY:", copy.slice(0, 5));
     copy = copy.filter((set) => {
-      console.log("\n\nSET:", set);
       if (!set.duration) return false;
       else {
         let dur = set.duration;
@@ -45,6 +43,8 @@ router.delete("/history/:id", async (req, res) => {
     params: { id },
   } = req;
 
+  console.log("\n\nDELETE REQUEST:", { params: req.params });
+
   if (!user || !id) {
     return res.status(422).send({ msg: "User or id is missing" });
   }
@@ -55,21 +55,18 @@ router.delete("/history/:id", async (req, res) => {
     );
 
     if (itemIdx === -1) {
-      console.log("\n\n404");
-      console.log("ID:", id, "\n\n");
       return res
         .status(404)
         .send({ msg: "Could not find session id in user's study sessions" });
     }
 
-    user.study_sessions.splice(itemIdx, 1);
+    const sessionsCopy = [...user.study_sessions];
+    sessionsCopy.splice(itemIdx, 1);
+    user.study_sessions = sessionsCopy;
 
-    const [dontcare, updatedUser] = await Promise.all([
-      StudySession.deleteOne({ _id: id }),
-      user.save(),
-    ]);
+    await Promise.all([StudySession.deleteOne({ _id: id }), user.save()]);
 
-    await updatedUser.populate({
+    await user.populate({
       path: "study_sessions",
       populate: {
         path: "flashcard_set",
@@ -77,10 +74,17 @@ router.delete("/history/:id", async (req, res) => {
       },
     });
 
-    console.log("\n\nUPDATED SESSIONS:", updatedUser.study_sessions);
-    return res.status(200).send({ history: updatedUser.study_sessions });
+    let populatedCopy = [...user.study_sessions].filter((session) => {
+      if (!session.duration) return false;
+      else {
+        let dur = session.duration;
+        return !dur.hours && dur.minutes && dur.seconds;
+      }
+    });
+
+    return res.status(200).send({ history: populatedCopy, moreThan20: false });
   } catch (e) {
-    console.log("error");
+    console.log("error:", e);
     return res.status(500).send({ msg: "Something went wrong" });
   }
 });

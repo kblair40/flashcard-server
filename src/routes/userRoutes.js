@@ -5,7 +5,7 @@ const router = express.Router();
 router.use(requireAuth);
 
 router.get("/user", async (req, res) => {
-  console.log("QUERY:", req.query);
+  // console.log("QUERY:", req.query);
   const { user } = req;
   if (!user) {
     return res.status(500).send({ msg: "Failure" });
@@ -32,7 +32,7 @@ router.patch("/user/:action", async (req, res) => {
   }
 
   const data = req.body;
-  console.log("DATA:", data);
+  // console.log("DATA:", data);
 
   if (data.favorite_set) {
     if (action === "add") {

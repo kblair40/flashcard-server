@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.post("/signup", async (req, res) => {
   // console.log("FULL REQ:", req, "\n\n");
-  console.log("BODY:", req.body);
+  // console.log("BODY:", req.body);
 
   const { email, password, first_name, last_name, username } = req.body;
 
@@ -25,12 +25,12 @@ router.post("/signup", async (req, res) => {
     await user.save();
     // IMPORTANT - change 'MY_SECRET_KEY' here and in requireAuth to be created by a secure method
     const token = jwt.sign({ userId: user._id }, "MY_SECRET_KEY");
-    console.log("NEW USER:", user);
-    console.log("TOKEN:", token);
+    // console.log("NEW USER:", user);
+    // console.log("TOKEN:", token);
     return res.send({ token, user });
   } catch (err) {
     // 422 - invalid data provided
-    console.log("ERROR SIGNING UP:", err);
+    // console.log("ERROR SIGNING UP:", err);
     let error_msg = "";
     let error_field = "";
 
@@ -38,7 +38,7 @@ router.post("/signup", async (req, res) => {
       error_field = Object.keys(err.keyPattern)[0];
       error_msg = `A user with this ${error_field} already exists`;
 
-      console.log("\n\nERROR MESSAGE:", error_msg);
+      // console.log("\n\nERROR MESSAGE:", error_msg);
     }
 
     return res.status(422).send({
@@ -49,7 +49,7 @@ router.post("/signup", async (req, res) => {
 });
 
 router.post("/signin", async (req, res) => {
-  console.log("SIGNIN BODY:", req.body);
+  // console.log("SIGNIN BODY:", req.body);
   const { username, password } = req.body;
   if (!username || !password) {
     console.error("Email or password was not provided");
@@ -68,7 +68,7 @@ router.post("/signin", async (req, res) => {
   try {
     await user.comparePassword(password);
     const token = jwt.sign({ userId: user._id }, "MY_SECRET_KEY");
-    console.log("token:", token);
+    // console.log("token:", token);
     return res.send({ token, user });
   } catch (e) {
     console.error("FAILED COMPARING PASSWORDS");
