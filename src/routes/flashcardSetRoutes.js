@@ -105,11 +105,10 @@ router.patch("/flashcard_set/:action/:id", async (req, res) => {
 });
 
 router.post("/flashcard_set", async (req, res) => {
-  // console.log("FULL REQ:", req, "\n\n");
-  // console.log("BODY:", req.body);
-
   const { title, description, category, is_public } = req.body;
   const { user } = req;
+
+  console.log("\n\n\nPUBLIC:", is_public, typeof is_public), "\n\n";
 
   try {
     const set = new FlashcardSet({
