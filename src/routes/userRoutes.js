@@ -43,11 +43,9 @@ router.patch("/user/:action", async (req, res) => {
       );
       console.log("CUR_FAV_SETS:", cur_fav_sets);
       if (cur_fav_sets.includes(data.favorite_set)) {
-        return res
-          .status(200)
-          .send({
-            msg: "Did not add due to the set already being in the user's favorite_flashcard_sets",
-          });
+        return res.status(200).send({
+          msg: "Did not add due to the set already being in the user's favorite_flashcard_sets",
+        });
       }
       user.favorite_flashcard_sets.push(data.favorite_set);
     } else {
