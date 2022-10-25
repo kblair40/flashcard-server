@@ -82,7 +82,9 @@ router.delete("/history/:id", async (req, res) => {
       }
     });
 
-    return res.status(200).send({ history: populatedCopy, moreThan20: false });
+    return res
+      .status(200)
+      .send({ history: populatedCopy, moreThan20: populatedCopy.length > 20 });
   } catch (e) {
     console.log("error:", e);
     return res.status(500).send({ msg: "Something went wrong" });
