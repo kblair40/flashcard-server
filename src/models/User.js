@@ -42,16 +42,47 @@ const userSchema = new mongoose.Schema(
     },
     default_styles: {
       type: {
-        isBold: Boolean,
-        isItalic: Boolean,
-        isUnderlined: Boolean,
-        fontSize: {
-          type: String,
-          enum: ["small", "medium", "large", "huge"],
+        front: {
+          isBold: Boolean,
+          isItalic: Boolean,
+          isUnderlined: Boolean,
+          fontSize: {
+            type: String,
+            enum: ["small", "medium", "large", "huge"],
+          },
+          textAlign: {
+            type: String,
+            enum: ["left", "center", "right", "justify"],
+          },
         },
-        textAlign: {
-          type: String,
-          enum: ["left", "center", "right", "justify"],
+        back: {
+          isBold: Boolean,
+          isItalic: Boolean,
+          isUnderlined: Boolean,
+          fontSize: {
+            type: String,
+            enum: ["small", "medium", "large", "huge"],
+          },
+          textAlign: {
+            type: String,
+            enum: ["left", "center", "right", "justify"],
+          },
+        },
+      },
+      default: {
+        front: {
+          isBold: false,
+          isItalic: false,
+          isUnderlined: false,
+          fontSize: "medium",
+          textAlign: "left",
+        },
+        back: {
+          isBold: false,
+          isItalic: false,
+          isUnderlined: false,
+          fontSize: "medium",
+          textAlign: "left",
         },
       },
     },
