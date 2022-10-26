@@ -9,7 +9,6 @@ app.use(cors());
 app.use(express.json());
 
 const MONGO_PASSWORD = process.env.MONGO_PASSWORD;
-// const PORT = 4000;
 
 // Models - must be above routes
 require("./models/User");
@@ -25,6 +24,7 @@ const userRoutes = require("./routes/userRoutes");
 const studySessionRoutes = require("./routes/studySessionRoutes");
 const historyRoutes = require("./routes/historyRoutes");
 const searchRoutes = require("./routes/searchRoutes");
+const stylesRoutes = require("./routes/stylesRoutes");
 
 app.use(authRoutes);
 app.use(flashcardSetRoutes);
@@ -33,6 +33,7 @@ app.use(studySessionRoutes);
 app.use(userRoutes);
 app.use(historyRoutes);
 app.use(searchRoutes);
+app.use(stylesRoutes);
 
 app.get("/", (req, res) => {
   res.send("WORKING");
