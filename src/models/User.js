@@ -40,6 +40,21 @@ const userSchema = new mongoose.Schema(
     study_sessions: {
       type: [{ type: mongoose.Types.ObjectId, ref: "StudySession" }],
     },
+    default_styles: {
+      type: {
+        isBold: Boolean,
+        isItalic: Boolean,
+        isUnderlined: Boolean,
+        fontSize: {
+          type: String,
+          enum: ["small", "medium", "large", "huge"],
+        },
+        textAlign: {
+          type: String,
+          enum: ["left", "center", "right", "justify"],
+        },
+      },
+    },
   },
   { timestamps: true }
 );
