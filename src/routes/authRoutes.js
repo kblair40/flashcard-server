@@ -5,6 +5,23 @@ const User = mongoose.model("User");
 
 const router = express.Router();
 
+const DEFAULT_STYLES = {
+  front: {
+    isBold: false,
+    isItalic: false,
+    isUnderlined: false,
+    fontSize: "medium",
+    textAlign: "left",
+  },
+  back: {
+    isBold: false,
+    isItalic: false,
+    isUnderlined: false,
+    fontSize: "medium",
+    textAlign: "left",
+  },
+};
+
 router.post("/signup", async (req, res) => {
   // console.log("FULL REQ:", req, "\n\n");
   // console.log("BODY:", req.body);
@@ -20,6 +37,7 @@ router.post("/signup", async (req, res) => {
       password,
       email_verified: false,
       avatar_image_url: "",
+      default_styles: DEFAULT_STYLES,
     });
 
     await user.save();
@@ -69,6 +87,20 @@ router.post("/signin", async (req, res) => {
     await user.comparePassword(password);
     const token = jwt.sign({ userId: user._id }, "MY_SECRET_KEY");
     // console.log("token:", token);
+
+    console.log("USER BEFORE SAVE:", user.default_styles._doc);
+    if (
+      !user.default_styles ||
+      !user.default_styles.front ||
+      !user.default_styles.back ||
+      !user.default_styles._doc.front.isBold ||
+      !user.default_styles._doc.back.isBold
+    ) {
+      user.set({ default_styles: DEFAULT_STYLES });
+      await user.save();
+      console.log("USER AFTER SAVE:", user);
+    }
+
     return res.send({ token, user });
   } catch (e) {
     console.error("FAILED COMPARING PASSWORDS");

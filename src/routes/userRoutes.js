@@ -12,8 +12,6 @@ router.get("/user", async (req, res) => {
   }
 
   if (req.query && req.query.flashcard_sets) {
-    // const { flashcard_sets } = user;
-
     await Promise.all([
       user.populate("flashcard_sets"),
       user.populate("study_sessions"),
