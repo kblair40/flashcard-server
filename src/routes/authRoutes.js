@@ -92,8 +92,8 @@ router.post("/signin", async (req, res) => {
       !user.default_styles ||
       !user.default_styles.front ||
       !user.default_styles.back ||
-      !user.default_styles._doc.front.isBold ||
-      !user.default_styles._doc.back.isBold
+      typeof user.default_styles._doc.front.isBold !== "boolean" ||
+      typeof user.default_styles._doc.back.isBold !== "boolean"
     ) {
       user.set({ default_styles: DEFAULT_STYLES });
       await user.save();
