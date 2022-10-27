@@ -85,6 +85,7 @@ const userSchema = new mongoose.Schema(
           textAlign: "left",
         },
       },
+      required: true,
     },
   },
   { timestamps: true }
