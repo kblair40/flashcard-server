@@ -86,9 +86,8 @@ router.post("/signin", async (req, res) => {
   try {
     await user.comparePassword(password);
     const token = jwt.sign({ userId: user._id }, "MY_SECRET_KEY");
-    // console.log("token:", token);
 
-    console.log("USER BEFORE SAVE:", user.default_styles._doc);
+    // TODO: Delete below when safe
     if (
       !user.default_styles ||
       !user.default_styles.front ||
@@ -98,7 +97,6 @@ router.post("/signin", async (req, res) => {
     ) {
       user.set({ default_styles: DEFAULT_STYLES });
       await user.save();
-      console.log("USER AFTER SAVE:", user);
     }
 
     return res.send({ token, user });
