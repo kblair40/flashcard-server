@@ -99,9 +99,10 @@ router.post("/signin", async (req, res) => {
       await user.save();
     }
 
-    await user.populate({
-      path: "flashcard_sets",
-    });
+    await Promise.all([
+      user.populate("flashcard_sets"),
+      user.populate("study_sessions"),
+    ]);
 
     return res.send({ token, user });
   } catch (e) {
