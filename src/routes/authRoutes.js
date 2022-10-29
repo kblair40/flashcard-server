@@ -99,6 +99,10 @@ router.post("/signin", async (req, res) => {
       await user.save();
     }
 
+    await user.populate({
+      path: "flashcard_sets",
+    });
+
     return res.send({ token, user });
   } catch (e) {
     console.error("FAILED COMPARING PASSWORDS");
