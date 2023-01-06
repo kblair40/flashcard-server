@@ -1,6 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
+
 const { requireAuth } = require("../middleware/requireAuth");
+
 const StudySession = mongoose.model("StudySession");
 
 const router = express.Router();
@@ -10,7 +12,6 @@ router.get("/history", async (req, res) => {
   const { user } = req;
 
   try {
-    // let pop_user = await user.populate({ path: "study_sessions" });
     let pop_user = await user.populate({
       path: "study_sessions",
       populate: {
@@ -18,7 +19,8 @@ router.get("/history", async (req, res) => {
         model: "FlashcardSet",
       },
     });
-    // console.log("\n\nSTUDY SESSIONS:", pop_user.study_sessions.slice(5, 15));
+
+    // Don't mutate the original
     let copy = [...pop_user.study_sessions];
     copy = copy.filter((set) => {
       if (!set.duration) return false;
@@ -30,7 +32,6 @@ router.get("/history", async (req, res) => {
     return res
       .status(200)
       .send({ history: copy.slice(0, 20), moreThan20: copy.length > 20 });
-    // return res.status(200).send({ history: pop_user.study_sessions });
   } catch (e) {
     console.log("error", e);
     return res.status(500).send({ msg: "Something went wrong" });
@@ -42,8 +43,6 @@ router.delete("/history/:id", async (req, res) => {
     user,
     params: { id },
   } = req;
-
-  console.log("\n\n\n\nDELETE REQUEST:", { params: req.params, user });
 
   if (!user || !id) {
     return res.status(422).send({ msg: "User or id is missing" });

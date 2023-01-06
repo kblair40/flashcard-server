@@ -1,6 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
+
 const { requireAuth } = require("../middleware/requireAuth");
+
 const FlashcardSet = mongoose.model("FlashcardSet");
 
 const router = express.Router();
@@ -11,7 +13,6 @@ router.get("/search", async (req, res) => {
     user,
     query: { title },
   } = req;
-  // console.log("SEARCH QUERY:", title);
 
   if (!user || !title) {
     return res.status(422).send([]);
@@ -46,13 +47,12 @@ router.get("/search", async (req, res) => {
     let validResults = [];
     if (results) {
       results.forEach((result) => {
-        console.log("RESULT:", result, result.public);
+        // console.log("RESULT:", result, result.public);
         if (result.public) {
           validResults.push(result);
         }
       });
     }
-    // console.log("\nVALID RESULTS:", validResults);
 
     return res.status(200).send(validResults);
   } catch (e) {

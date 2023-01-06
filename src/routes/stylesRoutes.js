@@ -17,19 +17,18 @@ router.patch("/styles", async (req, res) => {
   }
 
   try {
-    const otherSide = side === "front" ? "back" : "front";
-    // console.log("OTHER SIDE STYLES:", user.default_styles[otherSide]);
+    const other_side = side === "front" ? "back" : "front";
 
     user.set({
       default_styles: {
         [`${side}`]: styles,
-        [`${otherSide}`]: user.default_styles[otherSide],
+        [`${other_side}`]: user.default_styles[other_side],
       },
     });
 
-    const savedUser = await user.save();
-    // console.log("\nSAVED USER:", savedUser);
-    return res.status(200).send(savedUser);
+    const saved_user = await user.save();
+
+    return res.status(200).send(saved_user);
   } catch (e) {
     console.log("\n\nERROR:", e);
     return res.status(500).send({ msg: "Something went wrong" });

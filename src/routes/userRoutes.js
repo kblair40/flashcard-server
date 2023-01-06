@@ -6,7 +6,6 @@ const router = express.Router();
 router.use(requireAuth);
 
 router.get("/user", async (req, res) => {
-  // console.log("QUERY:", req.query);
   const { user } = req;
   if (!user) {
     return res.status(500).send({ msg: "Failure" });
@@ -17,10 +16,8 @@ router.get("/user", async (req, res) => {
       user.populate("flashcard_sets"),
       user.populate("study_sessions"),
     ]);
-    // console.log("\n\npopulated sessions:", user.study_sessions.slice(0, 5));
   }
 
-  // return res.status(200).send({ user });
   return res.status(200).send({ user });
 });
 
@@ -33,21 +30,19 @@ router.patch("/user/:action", async (req, res) => {
   }
 
   const data = req.body;
-  // console.log("DATA:", data);
 
   if (data.favorite_set) {
     if (action === "add") {
-      // console.log("DATA.FAVORITE_SET:", data.favorite_set);
-      // console.log("USER FAVORITES:", user.favorite_flashcard_sets);
       const cur_fav_sets = [...user.favorite_flashcard_sets].map((setId) =>
         setId.toString()
       );
-      // console.log("CUR_FAV_SETS:", cur_fav_sets);
+
       if (cur_fav_sets.includes(data.favorite_set)) {
         return res.status(200).send({
           msg: "Did not add due to the set already being in the user's favorite_flashcard_sets",
         });
       }
+
       user.favorite_flashcard_sets.push(data.favorite_set);
     } else {
       let fav_set_idx = user.favorite_flashcard_sets.findIndex((setId) => {
