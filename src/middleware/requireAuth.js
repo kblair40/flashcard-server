@@ -2,13 +2,16 @@ const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 const User = mongoose.model("User");
 
+/*
+  Fetches user from Mongo and adds to request as req.user.
+  If user not found or auth header not present/invalid, 401 response is sent here.
+  Otherwise, request is forwarded to route handler
+*/
 const requireAuth = (req, res, next) => {
   const { authorization } = req.headers;
-  // authorization === 'Bearer gfsdas5665gfs5sdsfsa4frs...'
+  // example header --> authorization === 'Bearer gfsdas5665gfs5sdsfsa...'
 
   if (!authorization) {
-    // 401 - forbidden
-    console.log("EARLY RETURN - 401");
     return res.status(401).send({ error: "You must be logged in." });
   }
 

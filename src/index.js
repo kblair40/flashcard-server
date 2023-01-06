@@ -10,7 +10,7 @@ app.use(express.json());
 
 const MONGO_PASSWORD = process.env.MONGO_PASSWORD;
 
-// Models - must be above routes
+// Models
 require("./models/User");
 require("./models/FlashcardSet");
 require("./models/Flashcard");
@@ -40,9 +40,8 @@ app.get("/", (req, res) => {
 });
 
 const PORT = process.env.PORT || 4000;
-
 app.listen(PORT, async () => {
-  // console.log(`Listening on port ${PORT}`);
+  console.log("Listening on port", PORT);
   const mongoUri = `mongodb+srv://kblair40:${MONGO_PASSWORD}@cluster0.dnysscy.mongodb.net/?retryWrites=true&w=majority`;
 
   try {
