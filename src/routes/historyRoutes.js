@@ -43,7 +43,7 @@ router.delete("/history/:id", async (req, res) => {
     params: { id },
   } = req;
 
-  console.log("\n\nDELETE REQUEST:", { params: req.params });
+  console.log("\n\n\n\nDELETE REQUEST:", { params: req.params, user });
 
   if (!user || !id) {
     return res.status(422).send({ msg: "User or id is missing" });

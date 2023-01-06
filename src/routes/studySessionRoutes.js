@@ -23,7 +23,12 @@ router.post("/study_session", async (req, res) => {
     const session = new StudySession({ start_time, flashcard_set });
     const savedSession = await session.save();
 
-    user.study_sessions.push(savedSession._id);
+    console.log("SAVED SESSION ID:", savedSession._id);
+    if (user.study_sessions && Array.isArray(user.study_sessions)) {
+      user.study_sessions.push(savedSession._id);
+    } else {
+      user.study_sessions = [savedSession._id];
+    }
     await user.save();
 
     return res.send({ study_session: savedSession });

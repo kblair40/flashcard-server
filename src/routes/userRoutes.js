@@ -1,6 +1,4 @@
 const express = require("express");
-const mongoose = require("mongoose");
-const User = mongoose.model("User");
 
 const { requireAuth } = require("../middleware/requireAuth");
 
@@ -20,39 +18,11 @@ router.get("/user", async (req, res) => {
       user.populate("study_sessions"),
     ]);
     // console.log("\n\npopulated sessions:", user.study_sessions.slice(0, 5));
-
-    const valid_sessions = [...user.study_sessions].filter(
-      (ses) =>
-        ses.duration && (ses.duration.minutes >= 1 || ses.duration.hours >= 1)
-    );
-
-    const valid_session_ids = valid_sessions.map((ses) => ses._id);
-    updateStudySessions(user._id, valid_session_ids);
-
-    // console.log("VALID SESSIONS:", valid_sessions);
   }
 
   // return res.status(200).send({ user });
   return res.status(200).send({ user });
 });
-
-const updateStudySessions = async (userId, valid_sessions) => {
-  // console.log("VALID SESSIONS:", valid_sessions);
-  const user = await User.findById(userId);
-
-  if (!user) {
-    console.log("\n\nNO USER\n\n");
-    return;
-  }
-
-  try {
-    user.study_sessions = valid_sessions;
-    const savedUser = await user.save();
-    // console.log("\nSAVED USER:", savedUser, "\n");
-  } catch (e) {
-    console.log("\n\nFAILED TO UPDATE USER STUDY SESSIONS:", e);
-  }
-};
 
 router.patch("/user/:action", async (req, res) => {
   const { user } = req;
