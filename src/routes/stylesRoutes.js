@@ -10,8 +10,6 @@ router.patch("/styles", async (req, res) => {
     body: { styles, side },
   } = req;
 
-  // console.log("STYLES/SIDE:", { styles, side });
-
   if (!user) {
     return res.status(422).send({ msg: "User was not found" });
   }
@@ -30,7 +28,7 @@ router.patch("/styles", async (req, res) => {
 
     return res.status(200).send(saved_user);
   } catch (e) {
-    console.log("\n\nERROR:", e);
+    console.log("\nError saving styles:", e);
     return res.status(500).send({ msg: "Something went wrong" });
   }
 });

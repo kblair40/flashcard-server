@@ -23,14 +23,14 @@ router.patch("/flashcard/:id", async (req, res) => {
   }
 
   try {
-    const foundCard = await Flashcard.findById(id);
+    const found_card = await Flashcard.findById(id);
 
-    foundCard.front_content = front_content;
-    foundCard.back_content = back_content;
+    found_card.front_content = front_content;
+    found_card.back_content = back_content;
 
-    const patchedCard = await foundCard.save();
+    const patched_card = await found_card.save();
 
-    return res.status(200).send({ flashcard: patchedCard });
+    return res.status(200).send({ flashcard: patched_card });
   } catch (e) {
     console.log("Erorr patching card:", e);
     return res.status(404).send({ msg: "Could not find card" });

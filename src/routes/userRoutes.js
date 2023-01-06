@@ -6,7 +6,9 @@ const router = express.Router();
 router.use(requireAuth);
 
 router.get("/user", async (req, res) => {
+  // Return the user (if exists) w/ flashcard_sets and study_sessions populated
   const { user } = req;
+
   if (!user) {
     return res.status(500).send({ msg: "Failure" });
   }
@@ -22,14 +24,15 @@ router.get("/user", async (req, res) => {
 });
 
 router.patch("/user/:action", async (req, res) => {
-  const { user } = req;
-  const { action } = req.params;
+  const {
+    user,
+    params: { action },
+    body: { data },
+  } = req;
 
   if (!user || !user.flashcard_sets) {
     return res.status(500).send({ msg: "Failure" });
   }
-
-  const data = req.body;
 
   if (data.favorite_set) {
     if (action === "add") {
@@ -58,14 +61,14 @@ router.patch("/user/:action", async (req, res) => {
   }
 
   try {
-    const savedUser = await user.save();
+    const saved_user = await user.save();
     if (action === "remove") {
-      await savedUser.populate({
+      await saved_user.populate({
         path: "favorite_flashcard_sets",
       });
     }
 
-    return res.status(200).send(savedUser);
+    return res.status(200).send(saved_user);
   } catch (err) {
     return res.status(500).send({ msg: "Failure" });
   }

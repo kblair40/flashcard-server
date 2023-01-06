@@ -47,6 +47,7 @@ router.post("/signup", async (req, res) => {
 
 router.post("/signin", async (req, res) => {
   const { username, password } = req.body;
+
   if (!username || !password) {
     console.log("Email or password was not provided");
     return res
@@ -58,7 +59,7 @@ router.post("/signin", async (req, res) => {
 
   // make sure we found a user with the provided username
   if (!user) {
-    console.error("Error: Could not find user");
+    console.log("Error: Could not find user");
     return res.status(403).send({
       error_msg: "Invalid email or password",
     });

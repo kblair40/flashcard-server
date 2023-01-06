@@ -31,6 +31,7 @@ router.get("/search", async (req, res) => {
         },
       },
       {
+        // fields that must be included in each result
         $project: {
           title: 1,
           description: 1,
@@ -39,7 +40,7 @@ router.get("/search", async (req, res) => {
         },
       },
       {
-        $limit: 5,
+        $limit: 5, // hardcoding for now
       },
     ]);
 
@@ -47,7 +48,6 @@ router.get("/search", async (req, res) => {
     let validResults = [];
     if (results) {
       results.forEach((result) => {
-        // console.log("RESULT:", result, result.public);
         if (result.public) {
           validResults.push(result);
         }

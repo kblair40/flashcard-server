@@ -115,6 +115,7 @@ router.post("/flashcard_set", async (req, res) => {
     return res.send({ flashcardSet });
   } catch (err) {
     // 422 - invalid data provided
+    // TODO: come back to this
     let error_msg = "";
     let error_field = "";
 
@@ -173,22 +174,27 @@ router.delete("/flashcard_set/:set_id", async (req, res) => {
   }
 
   try {
-    const userSets = [...user.flashcard_sets].map((set) => set.toString());
-    const setIdx = userSets.findIndex((setId) => setId === set_id);
+    const user_sets = [...user.flashcard_sets].map((set) => set.toString());
+    const setIdx = user_sets.findIndex((setId) => setId === set_id);
 
     if (setIdx !== -1) {
-      userSets.splice(setIdx, 1);
-      user.flashcard_sets = userSets;
+      user_sets.splice(setIdx, 1);
+      user.flashcard_sets = user_sets;
 
-      const userFavSets = [...user.favorite_flashcard_sets].map((set) =>
+      const user_fav_sets = [...user.favorite_flashcard_sets].map((set) =>
         set.toString()
       );
 
-      if (userFavSets.includes(set_id)) {
-        const favSetIdx = userFavSets.findIndex((setId) => setId === set_id);
-        if (favSetIdx !== -1) {
-          userFavSets.splice(favSetIdx, 1);
-          user.favorite_flashcard_sets = userFavSets;
+      if (user_fav_sets.includes(set_id)) {
+        const fav_set_idx = user_fav_sets.findIndex(
+          (setId) => setId === set_id
+        );
+
+        if (fav_set_idx !== -1) {
+          /* if set being deleted is one of the user's favorite sets, 
+          remove it from their favorites */
+          user_fav_sets.splice(fav_set_idx, 1);
+          user.favorite_flashcard_sets = user_fav_sets;
         }
       }
 
@@ -211,20 +217,20 @@ module.exports = router;
 // CONTROLLERS/HELPERS
 const handlePatchFlashcardSet = async (id, req, res) => {
   const { body } = req;
-  const flashcardSet = await FlashcardSet.findById(id);
-  if (!flashcardSet) {
+  const flashcard_set = await FlashcardSet.findById(id);
+  if (!flashcard_set) {
     return res
       .status(404)
       .send({ msg: "Could not find the flashcard set to add to" });
   }
 
   for (let field in body) {
-    flashcardSet[field] = body[field];
+    flashcard_set[field] = body[field];
   }
 
   try {
-    const patchedSet = await flashcardSet.save();
-    return res.status(200).send({ set: patchedSet });
+    const patched_set = await flashcard_set.save();
+    return res.status(200).send({ set: patched_set });
   } catch (e) {
     console.log("FAILED TO PATCH SET:", e);
     return res.status(400).send({ msg: "Failure" });
