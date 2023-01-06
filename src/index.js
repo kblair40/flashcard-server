@@ -42,7 +42,7 @@ app.get("/", (req, res) => {
 const PORT = process.env.PORT || 4000;
 
 app.listen(PORT, async () => {
-  console.log(`Listening on port ${PORT}`);
+  // console.log(`Listening on port ${PORT}`);
   const mongoUri = `mongodb+srv://kblair40:${MONGO_PASSWORD}@cluster0.dnysscy.mongodb.net/?retryWrites=true&w=majority`;
 
   try {

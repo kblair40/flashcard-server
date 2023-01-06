@@ -11,7 +11,7 @@ router.get("/search", async (req, res) => {
     user,
     query: { title },
   } = req;
-  console.log("SEARCH QUERY:", title);
+  // console.log("SEARCH QUERY:", title);
 
   if (!user || !title) {
     return res.status(422).send([]);
@@ -52,7 +52,7 @@ router.get("/search", async (req, res) => {
         }
       });
     }
-    console.log("\nVALID RESULTS:", validResults);
+    // console.log("\nVALID RESULTS:", validResults);
 
     return res.status(200).send(validResults);
   } catch (e) {

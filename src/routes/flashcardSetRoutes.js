@@ -21,7 +21,7 @@ router.get("/flashcard_set/:id", async (req, res) => {
 
     return res.status(200).send({ set: foundSet });
   } catch (e) {
-    console.log("FAILED TO FIND SET:", e);
+    // console.log("FAILED TO FIND SET:", e);
     return res.status(404).send({ msg: "FAILURE" });
   }
 });
@@ -108,7 +108,7 @@ router.post("/flashcard_set", async (req, res) => {
   const { title, description, category, is_public } = req.body;
   const { user } = req;
 
-  console.log("\n\n\nPUBLIC:", is_public, typeof is_public), "\n\n";
+  // console.log("\n\n\nPUBLIC:", is_public, typeof is_public), "\n\n";
 
   try {
     const set = new FlashcardSet({
@@ -143,7 +143,7 @@ router.post("/flashcard_set", async (req, res) => {
 
 router.delete("/flashcard_set/:set_id/:card_id", async (req, res) => {
   const { set_id, card_id } = req.params;
-  console.log("NEW DELETE REQ:", req.body);
+  // console.log("NEW DELETE REQ:", req.body);
   if (!set_id || !card_id) {
     return res.status(422).send({ msg: "missing card id and/or set id" });
   }
@@ -189,14 +189,14 @@ router.delete("/flashcard_set/:set_id", async (req, res) => {
   try {
     // console.log("USER SETS:", user.flashcard_sets);
     const userSets = [...user.flashcard_sets].map((set) => set.toString());
-    console.log("USER SETS AFTER:", userSets);
-    console.log({ set_id });
+    // console.log("USER SETS AFTER:", userSets);
+    // console.log({ set_id });
 
     let promises = [];
     const setIdx = userSets.findIndex((setId) => setId === set_id);
     if (setIdx !== -1) {
-      console.log("INDEX:", setIdx);
-      console.log("Set to delete =", userSets[setIdx]);
+      // console.log("INDEX:", setIdx);
+      // console.log("Set to delete =", userSets[setIdx]);
       userSets.splice(setIdx, 1);
       user.flashcard_sets = userSets;
 
@@ -205,7 +205,7 @@ router.delete("/flashcard_set/:set_id", async (req, res) => {
       );
 
       if (userFavSets.includes(set_id)) {
-        console.log("YES IS FAVORITE:", userFavSets);
+        // console.log("YES IS FAVORITE:", userFavSets);
         const favSetIdx = userFavSets.findIndex((setId) => setId === set_id);
         if (favSetIdx !== -1) {
           userFavSets.splice(favSetIdx, 1);
@@ -218,7 +218,7 @@ router.delete("/flashcard_set/:set_id", async (req, res) => {
         FlashcardSet.deleteOne({ _id: set_id }),
       ]);
 
-      console.log("\n\nRES:", { savedUser, revisedSets });
+      // console.log("\n\nRES:", { savedUser, revisedSets });
       return res.status(200).send({ msg: "Success" });
     } else {
       console.log("\nNOT FOUND:\n");

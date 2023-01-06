@@ -10,7 +10,7 @@ router.patch("/styles", async (req, res) => {
     body: { styles, side },
   } = req;
 
-  console.log("STYLES/SIDE:", { styles, side });
+  // console.log("STYLES/SIDE:", { styles, side });
 
   if (!user) {
     return res.status(422).send({ msg: "User was not found" });
@@ -18,7 +18,7 @@ router.patch("/styles", async (req, res) => {
 
   try {
     const otherSide = side === "front" ? "back" : "front";
-    console.log("OTHER SIDE STYLES:", user.default_styles[otherSide]);
+    // console.log("OTHER SIDE STYLES:", user.default_styles[otherSide]);
 
     user.set({
       default_styles: {
@@ -28,7 +28,7 @@ router.patch("/styles", async (req, res) => {
     });
 
     const savedUser = await user.save();
-    console.log("\nSAVED USER:", savedUser);
+    // console.log("\nSAVED USER:", savedUser);
     return res.status(200).send(savedUser);
   } catch (e) {
     console.log("\n\nERROR:", e);

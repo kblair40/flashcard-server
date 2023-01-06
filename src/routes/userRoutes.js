@@ -19,7 +19,7 @@ router.get("/user", async (req, res) => {
       user.populate("flashcard_sets"),
       user.populate("study_sessions"),
     ]);
-    console.log("\n\npopulated sessions:", user.study_sessions.slice(0, 5));
+    // console.log("\n\npopulated sessions:", user.study_sessions.slice(0, 5));
 
     const valid_sessions = [...user.study_sessions].filter(
       (ses) =>
@@ -37,7 +37,7 @@ router.get("/user", async (req, res) => {
 });
 
 const updateStudySessions = async (userId, valid_sessions) => {
-  console.log("VALID SESSIONS:", valid_sessions);
+  // console.log("VALID SESSIONS:", valid_sessions);
   const user = await User.findById(userId);
 
   if (!user) {
@@ -48,7 +48,7 @@ const updateStudySessions = async (userId, valid_sessions) => {
   try {
     user.study_sessions = valid_sessions;
     const savedUser = await user.save();
-    console.log("\nSAVED USER:", savedUser, "\n");
+    // console.log("\nSAVED USER:", savedUser, "\n");
   } catch (e) {
     console.log("\n\nFAILED TO UPDATE USER STUDY SESSIONS:", e);
   }
@@ -67,12 +67,12 @@ router.patch("/user/:action", async (req, res) => {
 
   if (data.favorite_set) {
     if (action === "add") {
-      console.log("DATA.FAVORITE_SET:", data.favorite_set);
-      console.log("USER FAVORITES:", user.favorite_flashcard_sets);
+      // console.log("DATA.FAVORITE_SET:", data.favorite_set);
+      // console.log("USER FAVORITES:", user.favorite_flashcard_sets);
       const cur_fav_sets = [...user.favorite_flashcard_sets].map((setId) =>
         setId.toString()
       );
-      console.log("CUR_FAV_SETS:", cur_fav_sets);
+      // console.log("CUR_FAV_SETS:", cur_fav_sets);
       if (cur_fav_sets.includes(data.favorite_set)) {
         return res.status(200).send({
           msg: "Did not add due to the set already being in the user's favorite_flashcard_sets",
