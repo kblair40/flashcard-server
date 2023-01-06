@@ -29,15 +29,13 @@ router.post("/signup", async (req, res) => {
     return res.send({ token, user });
   } catch (err) {
     // 422 - invalid data provided
-    // console.log("ERROR SIGNING UP:", err);
     let error_msg = "";
     let error_field = "";
 
+    // 11000 === a field that is required to be unique is not unique
     if (err.code === 11000) {
       error_field = Object.keys(err.keyPattern)[0];
       error_msg = `A user with this ${error_field} already exists`;
-
-      // console.log("\n\nERROR MESSAGE:", error_msg);
     }
 
     return res.status(422).send({
@@ -50,34 +48,25 @@ router.post("/signup", async (req, res) => {
 router.post("/signin", async (req, res) => {
   const { username, password } = req.body;
   if (!username || !password) {
-    console.error("Email or password was not provided");
+    console.log("Email or password was not provided");
     return res
       .status(403)
       .send({ error_msg: "Must provide username and password" });
   }
+
   let user = await User.findOne({ username });
-  // make sure we found a user with the given email address
+
+  // make sure we found a user with the provided username
   if (!user) {
     console.error("Error: Could not find user");
     return res.status(403).send({
       error_msg: "Invalid email or password",
     });
   }
+
   try {
     await user.comparePassword(password);
     const token = jwt.sign({ userId: user._id }, "MY_SECRET_KEY");
-
-    // TODO: Delete below when safe
-    if (
-      !user.default_styles ||
-      !user.default_styles.front ||
-      !user.default_styles.back ||
-      typeof user.default_styles._doc.front.isBold !== "boolean" ||
-      typeof user.default_styles._doc.back.isBold !== "boolean"
-    ) {
-      user.set({ default_styles: DEFAULT_STYLES });
-      await user.save();
-    }
 
     await Promise.all([
       user.populate("flashcard_sets"),
