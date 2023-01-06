@@ -3,29 +3,11 @@ const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const User = mongoose.model("User");
 
+const { DEFAULT_STYLES } = require("../utils/constants");
+
 const router = express.Router();
 
-const DEFAULT_STYLES = {
-  front: {
-    isBold: false,
-    isItalic: false,
-    isUnderlined: false,
-    fontSize: "medium",
-    textAlign: "left",
-  },
-  back: {
-    isBold: false,
-    isItalic: false,
-    isUnderlined: false,
-    fontSize: "medium",
-    textAlign: "left",
-  },
-};
-
 router.post("/signup", async (req, res) => {
-  // console.log("FULL REQ:", req, "\n\n");
-  // console.log("BODY:", req.body);
-
   const { email, password, first_name, last_name, username } = req.body;
 
   try {
@@ -41,10 +23,9 @@ router.post("/signup", async (req, res) => {
     });
 
     await user.save();
-    // IMPORTANT - change 'MY_SECRET_KEY' here and in requireAuth to be created by a secure method
+    // TODO // IMPORTANT - change 'MY_SECRET_KEY' here and in requireAuth to be created by a secure method
     const token = jwt.sign({ userId: user._id }, "MY_SECRET_KEY");
-    // console.log("NEW USER:", user);
-    // console.log("TOKEN:", token);
+
     return res.send({ token, user });
   } catch (err) {
     // 422 - invalid data provided
@@ -67,7 +48,6 @@ router.post("/signup", async (req, res) => {
 });
 
 router.post("/signin", async (req, res) => {
-  // console.log("SIGNIN BODY:", req.body);
   const { username, password } = req.body;
   if (!username || !password) {
     console.error("Email or password was not provided");

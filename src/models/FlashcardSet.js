@@ -21,8 +21,8 @@ const flashcardSetSchema = new mongoose.Schema(
       default: true,
     },
     last_study_session_timestamp: {
+      // unix timestamp
       type: Number,
-      // default: Date.now,
     },
   },
   { timestamps: true }
