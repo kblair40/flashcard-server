@@ -1,7 +1,8 @@
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 const User = mongoose.model("User");
-
+const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
+console.log("JWT SECRET KEY AUTH:", JWT_SECRET_KEY);
 /*
   Fetches user from Mongo and adds to request as req.user.
   If user not found or auth header not present/invalid, 401 response is sent here.
@@ -16,7 +17,8 @@ const requireAuth = (req, res, next) => {
   }
 
   const token = authorization.replace("Bearer ", "");
-  jwt.verify(token, "MY_SECRET_KEY", async (err, payload) => {
+  // jwt.verify(token, "MY_SECRET_KEY", async (err, payload) => {
+  jwt.verify(token, JWT_SECRET_KEY, async (err, payload) => {
     // payload will be whatever we put into our jwt, which is the user id
     if (err) {
       return res.status(401).send({ error: "You must be logged in." });

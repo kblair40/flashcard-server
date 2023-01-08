@@ -7,6 +7,9 @@ const { DEFAULT_STYLES } = require("../utils/constants");
 
 const router = express.Router();
 
+const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
+console.log("JWT SECRET KEY:", JWT_SECRET_KEY);
+
 router.post("/signup", async (req, res) => {
   const { email, password, first_name, last_name, username } = req.body;
 
@@ -24,7 +27,8 @@ router.post("/signup", async (req, res) => {
 
     await user.save();
     // TODO // IMPORTANT - change 'MY_SECRET_KEY' here and in requireAuth to be created by a secure method
-    const token = jwt.sign({ userId: user._id }, "MY_SECRET_KEY");
+    // const token = jwt.sign({ userId: user._id }, "MY_SECRET_KEY");
+    const token = jwt.sign({ userId: user._id }, JWT_SECRET_KEY);
 
     return res.send({ token, user });
   } catch (err) {
@@ -67,7 +71,8 @@ router.post("/signin", async (req, res) => {
 
   try {
     await user.comparePassword(password);
-    const token = jwt.sign({ userId: user._id }, "MY_SECRET_KEY");
+    const token = jwt.sign({ userId: user._id }, JWT_SECRET_KEY);
+    // const token = jwt.sign({ userId: user._id }, "MY_SECRET_KEY");
 
     await Promise.all([
       user.populate("flashcard_sets"),
