@@ -93,15 +93,20 @@ const userSchema = new mongoose.Schema(
 
 userSchema.pre("save", function (next) {
   const user = this;
+
+  // will be true first time user is created and anytime password is changed
   if (!user.isModified("password")) {
     return next();
   }
 
+  // generate salt to pass to hash function
+  // 10 rounds is recommended by bcrypt
   bcrypt.genSalt(10, (err, salt) => {
     if (err) {
       return next(err);
     }
 
+    // create hash to be stored as the user's password
     bcrypt.hash(user.password, salt, (err, hash) => {
       if (err) {
         return next(err);
@@ -116,6 +121,7 @@ userSchema.methods.comparePassword = function (candidatePassword) {
   const user = this;
 
   return new Promise((resolve, reject) => {
+    // make sure provided password matches hashed password stored in db
     bcrypt.compare(candidatePassword, user.password, (err, isMatch) => {
       if (err) {
         return reject(err);

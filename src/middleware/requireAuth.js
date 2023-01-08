@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const User = mongoose.model("User");
 
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
+
 /*
   Fetches user from Mongo and adds to request as req.user.
   If user not found or auth header not present/invalid, 401 response is sent here.
