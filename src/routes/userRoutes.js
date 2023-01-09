@@ -30,11 +30,13 @@ router.patch("/user/:action", async (req, res) => {
     body: { data },
   } = req;
 
+  console.log("BODY/PARAMS:", { body: req.body, params: req.params });
+
   if (!user || !user.flashcard_sets) {
     return res.status(500).send({ msg: "Failure" });
   }
 
-  if (data.favorite_set) {
+  if (data && data.favorite_set) {
     if (action === "add") {
       const cur_fav_sets = [...user.favorite_flashcard_sets].map((setId) =>
         setId.toString()
@@ -48,13 +50,16 @@ router.patch("/user/:action", async (req, res) => {
 
       user.favorite_flashcard_sets.push(data.favorite_set);
     } else {
+      console.log("\nCURRENT FAVS:", user.favorite_flashcard_sets);
       let fav_set_idx = user.favorite_flashcard_sets.findIndex((setId) => {
         return setId.toString() === data.favorite_set;
       });
 
+      console.log("FAV SET IDX:", fav_set_idx);
       if (fav_set_idx !== -1) {
         let sets_copy = [...user.favorite_flashcard_sets];
         sets_copy.splice(fav_set_idx, 1);
+        console.log("FAV SETS AFTER REMOVE:", sets_copy);
         user.favorite_flashcard_sets = sets_copy;
       }
     }
